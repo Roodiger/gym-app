@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gym_app/authentication_service.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gym_app/nav_drawer.dart';
 import 'package:gym_app/line_graph.dart';
 import 'package:gym_app/pie_chart.dart';
@@ -10,8 +7,8 @@ import 'package:gym_app/pie_chart.dart';
 class InfoGraphPage extends StatelessWidget {
 
   final tabs = [
-    'Muscles Worked',
     'Exercise Volume',
+    'Muscles Worked',
     'Other Graph',
   ];
 
@@ -36,15 +33,40 @@ class InfoGraphPage extends StatelessWidget {
         child: Center(
           child: TabBarView(
             children: <Widget>[
-              Container(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width * 0.90,
-                  child: LineGraph.withSampleData()
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width * 0.90,
+                      child: LineGraph.withSampleData()
+                  ),
+                  Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width * 0.90,
+                      child: Text("This is a chart depicting your exercise volume.",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                          ),
+                  ),
+
+                ],
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.45,
-                width: MediaQuery.of(context).size.width * 0.90,
-                child: PieChart.withSampleData(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.45,
+                    width: MediaQuery.of(context).size.width * 0.90,
+                    child: PieChart.withSampleData(),
+                  ),
+                  Container(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width * 0.90,
+                    child: Text("This is a chart depicting your muscles worked.",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
               Container(
                 child: PieChart.withSampleData(),
