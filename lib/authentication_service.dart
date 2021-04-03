@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthenticationService {
 
@@ -18,13 +19,28 @@ class AuthenticationService {
   }
 
 
-  Future<String> signUp({String email, String password}) async {
+  Future<String> signUp({String email, String password, String firstName, String lastName}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-      return "Signed up";
+        await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+        this.addUserToUsersTable(firstName, lastName, email);
+        return "Signed up";
     } on FirebaseAuthException catch(e) {
       return e.message;
     }
+  }
+
+  Future<DocumentReference> addUserToUsersTable(String firstName, String lastName, String email) {
+    if (_firebaseAuth.currentUser == null) {
+      throw Exception('Must be logged in');
+    }
+
+    return FirebaseFirestore.instance.collection('users').add({
+      'user_id': FirebaseAuth.instance.currentUser.uid,
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'created_at': DateTime.now(),
+    });
   }
 
   getEmail() {
