@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AuthenticationService {
 
   final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestoreInstance = FirebaseFirestore.instance;
 
   AuthenticationService(this._firebaseAuth);
 
@@ -34,7 +35,7 @@ class AuthenticationService {
       throw Exception('Must be logged in');
     }
 
-    return FirebaseFirestore.instance.collection('users').add({
+    return _firestoreInstance.collection('users').add({
       'user_id': FirebaseAuth.instance.currentUser.uid,
       'first_name': firstName,
       'last_name': lastName,

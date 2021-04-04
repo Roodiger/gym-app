@@ -3,6 +3,7 @@ import 'package:gym_app/authentication_service.dart';
 import 'package:provider/provider.dart';
 import 'package:gym_app/calendar.dart';
 import 'package:gym_app/info_graphs.dart';
+import 'package:gym_app/profile.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -38,7 +39,12 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Profile'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () =>
+            { Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            ),
+            }
           ),
           ListTile(
             leading: Icon(Icons.leaderboard),
