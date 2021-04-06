@@ -28,8 +28,6 @@ class SignInPage extends StatelessWidget {
 
       body: SafeArea(
         child: ListView(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
               child: Padding(

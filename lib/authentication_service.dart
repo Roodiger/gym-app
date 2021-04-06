@@ -40,6 +40,12 @@ class AuthenticationService {
       'first_name': firstName,
       'last_name': lastName,
       'email': email,
+      'tags' : [
+        "Anterior Deltoid","Biceps", "Chest", "Triceps", "Abs",
+        "Legs", "Upper", "Lower", "Push", "Pull" "Lateral Deltoid", "Traps",
+        "Upper Back", "Rear Deltoid", "Forearms", "Lower Back", "Lats",
+        "Glutes", "Quads", "Hamstrings", "Calves"
+      ],
       'created_at': DateTime.now(),
     });
   }
