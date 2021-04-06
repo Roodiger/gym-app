@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/nav_drawer.dart';
-import 'package:gym_app/line_graph.dart';
-import 'package:gym_app/pie_chart.dart';
+import 'file:///H:/Flutter%20Projects/gym-app/lib/graphs/line_graph.dart';
+import 'file:///H:/Flutter%20Projects/gym-app/lib/graphs/pie_chart.dart';
 
 
 class InfoGraphPage extends StatelessWidget {

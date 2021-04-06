@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/authentication_service.dart';
+import 'package:gym_app/screens/exercises.dart';
 import 'package:provider/provider.dart';
-import 'package:gym_app/calendar.dart';
-import 'package:gym_app/info_graphs.dart';
-import 'package:gym_app/profile.dart';
+import 'package:gym_app/screens/calendar.dart';
+import 'package:gym_app/screens/info_graphs.dart';
+import 'package:gym_app/screens/profile.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -24,7 +25,11 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.fitness_center),
             title: Text('Exercises'),
-            onTap: () => {},
+            onTap: () => {Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ExercisesPage()),
+            ),
+            },
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),

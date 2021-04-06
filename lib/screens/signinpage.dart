@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/authentication_service.dart';
 import 'package:provider/provider.dart';
-import 'package:gym_app/signuppage.dart';
+import 'package:gym_app/screens/signuppage.dart';
 
 const kTextFieldDecoration = InputDecoration(
   hintStyle: TextStyle(

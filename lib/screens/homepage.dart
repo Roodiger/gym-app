@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/authentication_service.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gym_app/nav_drawer.dart';
 
 class HomePage extends StatelessWidget {

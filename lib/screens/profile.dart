@@ -32,7 +32,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
-        title: Text('User Profile'),
+        title: Text('Profile'),
       ),
       body: SafeArea(
         child: Center(

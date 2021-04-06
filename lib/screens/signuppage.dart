@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/authentication_service.dart';
-import 'package:gym_app/signinpage.dart';
+import 'package:gym_app/screens/signinpage.dart';
 import 'package:provider/provider.dart';
 
 const kTextFieldDecoration = InputDecoration(
