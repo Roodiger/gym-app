@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:gym_app/screens/calendar.dart';
 import 'package:gym_app/screens/info_graphs.dart';
 import 'package:gym_app/screens/profile.dart';
+import 'package:gym_app/screens/start_workout.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -22,6 +23,15 @@ class NavDrawer extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.deepPurple,
             ),
+          ),
+          ListTile(
+            leading: Icon(Icons.flag),
+            title: Text('Start Workout'),
+            onTap: () => {Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => StartWorkoutPage()),
+            ),
+            },
           ),
           ListTile(
             leading: Icon(Icons.event_note),

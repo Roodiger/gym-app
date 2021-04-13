@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 const kTextFieldDecoration = InputDecoration(
-  hintStyle: TextStyle(
+  labelStyle: TextStyle(
       fontSize: 20.0, color: Colors.white
   ),
   contentPadding: EdgeInsets.symmetric(
@@ -20,18 +20,32 @@ const kTextFieldDecoration = InputDecoration(
   ),
 );
 
+class ExerciseList {
+  String id;
+  String name;
+
+  ExerciseList({this.id, this.name});
+}
+
+
+
 class ProgramsPage extends StatelessWidget {
 
   final FirebaseFirestore _firestoreInstance = FirebaseFirestore.instance;
   final TextEditingController alertBoxTextController = new TextEditingController();
   final TextEditingController exerciseNameController =  new TextEditingController();
   final TextEditingController exerciseDescriptionController =  new TextEditingController();
+  final TextEditingController exerciseRepsController =  new TextEditingController();
+  final TextEditingController exerciseSetsController =  new TextEditingController();
+  final TextEditingController exerciseRPEController =  new TextEditingController();
+  final TextEditingController exerciseRestController =  new TextEditingController();
+
 
   @override
 
   Widget build(BuildContext context) {
 
-    List _exerciseList = [];
+    List<ExerciseList> _exerciseList = [];
 
     FutureBuilder<QuerySnapshot>(
       future: _firestoreInstance.collection('exercises').where('user_id', whereIn: ['default', FirebaseAuth.instance.currentUser.uid]).get(),
@@ -45,16 +59,13 @@ class ProgramsPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
 
           snapshot.data.docs.forEach((snapshot) {
-            _exerciseList.add({"id" : snapshot.id, "name" : snapshot.data()['name']});
+            _exerciseList.add(ExerciseList(id: snapshot.id, name: snapshot.data()['name']));
           });
+
           return Text("Done");
         }
 
-
         return Text("Loading...");
-
-
-
 
       },
     );
@@ -75,7 +86,7 @@ class ProgramsPage extends StatelessWidget {
                     return new CircularProgressIndicator();
                   }
                   var user = userSnapshot.data.docs[0];
-
+                  int exerciseCount = 0;
                   return  Center(
                     child: StreamBuilder(
                         stream: _firestoreInstance.collection('programs')
@@ -99,8 +110,8 @@ class ProgramsPage extends StatelessWidget {
                                           return new CircularProgressIndicator();
                                         }
                                         var exercises = userSnapshot.data.docs;
-
-                                        String valueChoose;
+                                        exerciseCount++;
+                                        String _selected;
                                         List<Widget> _programExerciseList = [];
 
                                         _programExerciseList.add(
@@ -170,9 +181,24 @@ class ProgramsPage extends StatelessWidget {
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                                  Padding(
-                                                                                  padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
-                                                                                      child: DropdownSearch<String>(
+                                                                                  FutureBuilder<QuerySnapshot>(
+                                                                                  future: _firestoreInstance.collection('exercises').where('user_id', whereIn: ['default', FirebaseAuth.instance.currentUser.uid]).get(),
+                                                                                  builder:
+                                                                                  (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+                                                                                  if (snapshot.hasError) {
+                                                                                  return Text("Something went wrong");
+                                                                                  }
+
+                                                                                  if (snapshot.connectionState == ConnectionState.done) {
+
+                                                                                  snapshot.data.docs.forEach((snapshot) {
+                                                                                  _exerciseList.add(ExerciseList(id: snapshot.id, name: snapshot.data()['name']));
+                                                                                  });
+
+                                                                                  return Padding(
+                                                                                    padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
+                                                                                      child: DropdownSearch<ExerciseList>(
                                                                                         dropdownSearchDecoration: kTextFieldDecoration.copyWith(
                                                                                           contentPadding: EdgeInsets.symmetric(
                                                                                               vertical: 4.0, horizontal: 20.0
@@ -196,22 +222,66 @@ class ProgramsPage extends StatelessWidget {
                                                                                         showSearchBox: true,
                                                                                         mode: Mode.BOTTOM_SHEET,
                                                                                         showSelectedItem: false,
-                                                                                        items: ['one', 'two','three'],
-                                                                                        label: "Exercise",
-                                                                                        selectedItem: 'one',
-                                                                                        onChanged: print,
-                                                                                          itemAsString: (String u) => u,
-                                                                                          ),
-                                                                                ),
+                                                                                        items: _exerciseList,
+                                                                                        selectedItem: _exerciseList[0],
+                                                                                        onChanged: (ExerciseList u){
+                                                                                          print(u.id);
+                                                                                          _selected = u.id;
+                                                                                        },
+                                                                                        itemAsString: (ExerciseList u) => u.name,
+                                                                                      ),
+                                                                                );
+                                                                                    }
+
+                                                                                    return Text("Loading...");
+
+                                                                                    },
+                                                                                  ),
                                                                               Padding(
                                                                                 padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
                                                                                 child: TextField(
-                                                                                  controller: exerciseDescriptionController,
-                                                                                  textCapitalization: TextCapitalization.sentences,
+                                                                                  controller: exerciseRepsController,
+                                                                                  keyboardType: TextInputType.number,
                                                                                   maxLines: null,
                                                                                   style: TextStyle(color: Colors.white, fontSize: 20),
                                                                                   decoration: kTextFieldDecoration.copyWith(
-                                                                                    hintText: "Description",
+                                                                                    labelText: "Reps",
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
+                                                                                child: TextField(
+                                                                                  controller: exerciseSetsController,
+                                                                                  keyboardType: TextInputType.number,
+                                                                                  maxLines: null,
+                                                                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                                                                  decoration: kTextFieldDecoration.copyWith(
+                                                                                    labelText: "Sets",
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
+                                                                                child: TextField(
+                                                                                  controller: exerciseRPEController,
+                                                                                  keyboardType: TextInputType.number,
+                                                                                  maxLines: null,
+                                                                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                                                                  decoration: kTextFieldDecoration.copyWith(
+                                                                                    labelText: "RPE",
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
+                                                                                child: TextField(
+                                                                                  controller: exerciseRestController,
+                                                                                  keyboardType: TextInputType.number,
+                                                                                  maxLines: null,
+                                                                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                                                                  decoration: kTextFieldDecoration.copyWith(
+                                                                                    labelText: "Rest Time (Seconds)",
                                                                                   ),
                                                                                 ),
                                                                               ),
@@ -239,13 +309,19 @@ class ProgramsPage extends StatelessWidget {
                                                                                 ),
 
                                                                                 onPressed: () {
-                                                                                  _firestoreInstance.collection('exercises').add({
-                                                                                    'description': exerciseDescriptionController.text.trim(),
-                                                                                    'name': exerciseNameController.text.trim(),
-                                                                                    'user_id': FirebaseAuth.instance.currentUser.uid,
+                                                                                  _firestoreInstance.collection('program_exercises').add({
+                                                                                    'exercise_id': _selected,
+                                                                                    'order': (exerciseCount + 1).toString(),
+                                                                                    'program_id': document.id,
+                                                                                    'reps' : exerciseRepsController.text.trim(),
+                                                                                    'sets' : exerciseSetsController.text.trim(),
+                                                                                    'rpe' : exerciseRPEController.text.trim(),
+                                                                                    'rest_time' : exerciseRestController.text.trim(),
                                                                                   });
-                                                                                  exerciseNameController.clear();
-                                                                                  exerciseDescriptionController.clear();
+                                                                                  exerciseRepsController.clear();
+                                                                                  exerciseSetsController.clear();
+                                                                                  exerciseRPEController.clear();
+                                                                                  exerciseRestController.clear();
                                                                                   Navigator.pop(context);
                                                                                 },
 
@@ -270,8 +346,7 @@ class ProgramsPage extends StatelessWidget {
                                                                                   ),
                                                                                 ),
                                                                                 onPressed: () {
-                                                                                  exerciseNameController.clear();
-                                                                                  exerciseDescriptionController.clear();
+                                                                                  print(_selected);
                                                                                   Navigator.pop(context);
                                                                                 },
                                                                                 child: Text("Cancel"),
