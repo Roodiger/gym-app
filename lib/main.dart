@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gym_app/authentication_service.dart';
-import 'file:///H:/Flutter%20Projects/gym-app/lib/screens/homepage.dart';
-import 'file:///H:/Flutter%20Projects/gym-app/lib/screens/signinpage.dart';
+import 'package:gym_app/screens/homepage.dart';
+import 'package:gym_app/screens/signinpage.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 

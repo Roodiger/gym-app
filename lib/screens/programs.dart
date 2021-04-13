@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gym_app/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 const kTextFieldDecoration = InputDecoration(
   hintStyle: TextStyle(
@@ -140,6 +140,28 @@ class ProgramsPage extends StatelessWidget {
                                                                                     ),
                                                                                   ),
                                                                                 ),
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
+                                                                                    child: DropdownSearch<String>(
+                                                                                      dropdownSearchDecoration: kTextFieldDecoration.copyWith(
+                                                                                        contentPadding: EdgeInsets.symmetric(
+                                                                                            vertical: 4.0, horizontal: 20.0
+                                                                                        ),
+                                                                                        labelStyle: TextStyle(
+                                                                                            fontSize: 22.0, color: Colors.white
+                                                                                        ),
+                                                                                        focusColor: Colors.white,
+                                                                                      ),
+                                                                                      autoFocusSearchBox: true,
+                                                                                      showSearchBox: true,
+                                                                                      mode: Mode.MENU,
+                                                                                      showSelectedItem: true,
+                                                                                      items: ["Brazil", "Italia", "Tunisia", 'Canada'],
+                                                                                      label: "Exercise",
+                                                                                      hint: "country in menu mode",
+                                                                                      onChanged: print,
+                                                                                      selectedItem: "Tunisia"),
                                                                               ),
                                                                               Padding(
                                                                                 padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
