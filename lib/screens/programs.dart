@@ -31,6 +31,34 @@ class ProgramsPage extends StatelessWidget {
 
   Widget build(BuildContext context) {
 
+    List _exerciseList = [];
+
+    FutureBuilder<QuerySnapshot>(
+      future: _firestoreInstance.collection('exercises').where('user_id', whereIn: ['default', FirebaseAuth.instance.currentUser.uid]).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+
+          snapshot.data.docs.forEach((snapshot) {
+            _exerciseList.add({"id" : snapshot.id, "name" : snapshot.data()['name']});
+          });
+          return Text("Done");
+        }
+
+
+        return Text("Loading...");
+
+
+
+
+      },
+    );
+
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
@@ -107,6 +135,7 @@ class ProgramsPage extends StatelessWidget {
                                                   child: new IconButton(
                                                       icon: Icon(Icons.add_circle,color: Colors.white, size: 40,),
                                                       onPressed: () {
+                                                        print(_exerciseList);
                                                         showDialog(
                                                           context: context,
                                                           builder: (context) =>
@@ -141,28 +170,39 @@ class ProgramsPage extends StatelessWidget {
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
-                                                                                    child: DropdownSearch<String>(
-                                                                                      dropdownSearchDecoration: kTextFieldDecoration.copyWith(
-                                                                                        contentPadding: EdgeInsets.symmetric(
-                                                                                            vertical: 4.0, horizontal: 20.0
+                                                                                  Padding(
+                                                                                  padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
+                                                                                      child: DropdownSearch<String>(
+                                                                                        dropdownSearchDecoration: kTextFieldDecoration.copyWith(
+                                                                                          contentPadding: EdgeInsets.symmetric(
+                                                                                              vertical: 4.0, horizontal: 20.0
+                                                                                          ),
+                                                                                          labelStyle: TextStyle(
+                                                                                              fontSize: 22.0, color: Colors.white
+                                                                                          ),
                                                                                         ),
-                                                                                        labelStyle: TextStyle(
-                                                                                            fontSize: 22.0, color: Colors.white
+                                                                                        dropdownBuilder:(BuildContext context, dynamic item, String itemAsString) {
+                                                                                          return Text(itemAsString, style: TextStyle(fontSize: 20.0, color: Colors.white,));
+                                                                                        },
+                                                                                        dropdownButtonBuilder: (_) => Padding(
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: const Icon(
+                                                                                            Icons.arrow_drop_down,
+                                                                                            size: 40,
+                                                                                            color: Colors.white,
+                                                                                          ),
                                                                                         ),
-                                                                                        focusColor: Colors.white,
-                                                                                      ),
-                                                                                      autoFocusSearchBox: true,
-                                                                                      showSearchBox: true,
-                                                                                      mode: Mode.MENU,
-                                                                                      showSelectedItem: true,
-                                                                                      items: ["Brazil", "Italia", "Tunisia", 'Canada'],
-                                                                                      label: "Exercise",
-                                                                                      hint: "country in menu mode",
-                                                                                      onChanged: print,
-                                                                                      selectedItem: "Tunisia"),
-                                                                              ),
+                                                                                        autoFocusSearchBox: true,
+                                                                                        showSearchBox: true,
+                                                                                        mode: Mode.BOTTOM_SHEET,
+                                                                                        showSelectedItem: false,
+                                                                                        items: ['one', 'two','three'],
+                                                                                        label: "Exercise",
+                                                                                        selectedItem: 'one',
+                                                                                        onChanged: print,
+                                                                                          itemAsString: (String u) => u,
+                                                                                          ),
+                                                                                ),
                                                                               Padding(
                                                                                 padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
                                                                                 child: TextField(
