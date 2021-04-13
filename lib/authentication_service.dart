@@ -42,7 +42,7 @@ class AuthenticationService {
       'email': email,
       'tags' : [
         "Anterior Deltoid","Biceps", "Chest", "Triceps", "Abs",
-        "Legs", "Upper", "Lower", "Push", "Pull" "Lateral Deltoid", "Traps",
+        "Legs", "Upper", "Lower", "Push", "Pull", "Lateral Deltoid", "Traps",
         "Upper Back", "Rear Deltoid", "Forearms", "Lower Back", "Lats",
         "Glutes", "Quads", "Hamstrings", "Calves"
       ],

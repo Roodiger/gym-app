@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/authentication_service.dart';
 import 'package:gym_app/screens/exercises.dart';
+import 'package:gym_app/screens/programs.dart';
 import 'package:provider/provider.dart';
 import 'package:gym_app/screens/calendar.dart';
 import 'package:gym_app/screens/info_graphs.dart';
@@ -21,6 +22,15 @@ class NavDrawer extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.deepPurple,
             ),
+          ),
+          ListTile(
+            leading: Icon(Icons.event_note),
+            title: Text('Programs'),
+            onTap: () => {Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProgramsPage()),
+            ),
+            },
           ),
           ListTile(
             leading: Icon(Icons.fitness_center),
