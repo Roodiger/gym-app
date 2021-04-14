@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:gym_app/authentication_service.dart';
 import 'package:provider/provider.dart';
 import 'package:gym_app/nav_drawer.dart';
@@ -8,6 +9,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:vibration/vibration.dart';
+
+const kTextFieldDecoration = InputDecoration(
+  border: InputBorder.none,
+  focusedBorder: InputBorder.none,
+  enabledBorder: InputBorder.none,
+  errorBorder: InputBorder.none,
+  disabledBorder: InputBorder.none,
+  hintStyle: TextStyle(
+      fontSize: 20.0, color: Colors.white30
+  ),
+);
 
 class Exercises {
   String id;
@@ -39,7 +51,9 @@ class WorkoutPage extends StatefulWidget {
 }
 
 class _WorkoutPageState extends State<WorkoutPage> {
+
   final FirebaseFirestore _firestoreInstance = FirebaseFirestore.instance;
+  CountdownTimerController _countdownTimerController;
   List<Exercises> _exerciseList = [];
 
   PageController _pageController = PageController(
@@ -53,11 +67,13 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
+
     void onEnd() {
       Vibration.vibrate();
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: NavDrawer(),
       appBar: AppBar(
         title: Text(widget._programName),
@@ -112,179 +128,336 @@ class _WorkoutPageState extends State<WorkoutPage> {
                                       rpe: document['rpe'],
                                       rest: document['rest_time']));
 
-                                  return Center(
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            exerciseSnapshot.data['name'],
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Set " +
-                                                setNumber.toString() +
-                                                " of " +
-                                                document['sets'],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
+                                  List<Widget> setList = [];
+
+                                  setList.add(
+                                    Center(
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 18),
+                                            child: Text(
+                                              exerciseSnapshot.data['name'],
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                           ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 100),
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      "Reps",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 24,
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 50.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                                      child: Text(
+                                                        'Reps',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16,
+                                                            ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    document['reps'],
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                                      child: Text(
+                                                        document['reps'],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                                      child: Text(
+                                                        'RPE',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                                      child: Text(
+                                                        document['rpe'],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                                      child: Text(
+                                                        'Rest',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                                      child: Text(
+                                                        document['rest_time'] + 's',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+
+                                  setList.add(
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              'Set',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      "RPE",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 24,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    document['rpe'],
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                    ),
-                                                  ),
-                                                ],
+                                            Text(
+                                              'Previous',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            Text(
+                                              'Weight',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            Text(
+                                              'Reps',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold
                                               ),
                                             ),
                                           ],
                                         ),
+                                      )
+                                  );
+
+                                  for(var i = 0; i <= (int.parse(document['sets']) - 1); i++){
+                                    print(i+1);
+                                    setList.add(
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                          (i + 1).toString(),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                          Text(
+                                            'TO DO',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                          IntrinsicWidth(
+                                            child: TextField(
+                                              style: TextStyle(color: Colors.white, fontSize: 20),
+                                              controller: new TextEditingController(),
+                                              keyboardType: TextInputType.number,
+                                              decoration: kTextFieldDecoration.copyWith(
+                                                hintText: "0",
+                                              ),
+                                            ),
+                                          ),
+                                          IntrinsicWidth(
+                                            child: TextField(
+                                              style: TextStyle(color: Colors.white, fontSize: 20),
+                                              controller: new TextEditingController(),
+                                              keyboardType: TextInputType.number,
+                                              decoration: kTextFieldDecoration.copyWith(
+                                                hintText: "0",
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    );
+                                  }
+                              //    setList.add( new Spacer());
+
+
+
+                                  return Center(
+                                    child: Column(
+                                      children: [
                                         Expanded(
-                                          child: Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(20.0),
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  textStyle: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w800),
-                                                  primary: Colors.white,
-                                                  onPrimary: Colors.black,
-                                                  minimumSize: Size(150, 50),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            32.0),
-                                                  ),
+                                          child: ListView(
+                                            children: setList,
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Padding(
+                                            padding:
+                                            const EdgeInsets.fromLTRB(0, 100.0, 0, 40),
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                textStyle: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                    FontWeight.w800),
+                                                primary: Colors.white,
+                                                onPrimary: Colors.black,
+                                                minimumSize: Size(150, 50),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      32.0),
                                                 ),
-                                                child: Text(setNumber >=
-                                                        int.parse(
-                                                            document['sets'])
-                                                    ? 'Next Exercise'
-                                                    : 'Next Set'),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    setNumber = setNumber + 1;
-                                                    if (setNumber >
-                                                        int.parse(
-                                                            document['sets'])) {
-                                                      setNumber = 1;
-                                                      _pageController.nextPage(
-                                                          duration: _kDuration,
-                                                          curve: _kCurve);
-                                                    } else {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (context) =>
-                                                            Dialog(
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                          insetPadding:
-                                                              EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          15,
-                                                                      vertical:
-                                                                          40),
-                                                          child: Container(
-                                                            width:
-                                                                double.infinity,
-                                                            height:
-                                                                double.infinity,
-                                                            decoration: BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15),
-                                                                color: const Color(
-                                                                    0xff332F43)),
-                                                            child: Column(
-                                                              children: [
-                                                                Expanded(
-                                                                  child: ListView(
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(50.0),
-                                                                          child:
-                                                                              Icon(
-                                                                            Icons.timer,
-                                                                            size:
-                                                                                100,
-                                                                            color:
-                                                                                Colors.white,
+                                              ),
+                                              child: Text(setNumber >=
+                                                  int.parse(
+                                                      document['sets'])
+                                                  ? 'Next Exercise'
+                                                  : 'Next Set'),
+                                              onPressed: () {
+                                                setState(() {
+                                                  setNumber = setNumber + 1;
+                                                  _countdownTimerController =
+                                                      CountdownTimerController(endTime: DateTime.now().millisecondsSinceEpoch + 1000 * int.parse(document['rest_time']), onEnd: onEnd);
+                                                  if (setNumber >
+                                                      int.parse(
+                                                          document['sets'])) {
+                                                    setNumber = 1;
+                                                    _pageController.nextPage(
+                                                        duration: _kDuration,
+                                                        curve: _kCurve);
+                                                  } else {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          Dialog(
+                                                            backgroundColor:
+                                                            Colors
+                                                                .transparent,
+                                                            insetPadding:
+                                                            EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                15,
+                                                                vertical:
+                                                                40),
+                                                            child: Container(
+                                                              width:
+                                                              double.infinity,
+                                                              height:
+                                                              double.infinity,
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                      15),
+                                                                  color: const Color(
+                                                                      0xff332F43)),
+                                                              child: Column(
+                                                                children: [
+                                                                  Container(
+                                                                    child: ListView(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                            const EdgeInsets.all(50.0),
+                                                                            child:
+                                                                            Icon(
+                                                                              Icons.timer,
+                                                                              size:
+                                                                              100,
+                                                                              color:
+                                                                              Colors.white,
+                                                                            ),
                                                                           ),
-                                                                        ),
-                                                                        CountdownTimer(
-                                                                          endTime:
-                                                                              DateTime.now().millisecondsSinceEpoch + 1000 * int.parse(document['rest_time']),
-                                                                          onEnd:
-                                                                              onEnd,
-                                                                          widgetBuilder:
-                                                                              (_, time) {
-                                                                            if (time ==
-                                                                                null) {
+                                                                          CountdownTimer(
+                                                                            controller: _countdownTimerController,
+                                                                            endTime:
+                                                                            DateTime.now().millisecondsSinceEpoch + 1000 * int.parse(document['rest_time']),
+                                                                            onEnd:
+                                                                            onEnd,
+                                                                            widgetBuilder:
+                                                                                (_, time) {
+                                                                              if (time ==
+                                                                                  null) {
+                                                                                return Center(
+                                                                                  child: Column(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        'Rest over',
+                                                                                        style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold),
+                                                                                      ),
+                                                                                      Align(
+                                                                                        alignment: Alignment.bottomCenter,
+                                                                                        child: Padding(
+                                                                                          padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 10),
+                                                                                          child: ElevatedButton(
+                                                                                            style: ElevatedButton.styleFrom(
+                                                                                              textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                                                                                              primary: Colors.white,
+                                                                                              onPrimary: Colors.black,
+                                                                                              minimumSize: Size(150, 50),
+                                                                                              shape: RoundedRectangleBorder(
+                                                                                                borderRadius: BorderRadius.circular(32.0),
+                                                                                              ),
+                                                                                            ),
+                                                                                            onPressed: () {
+                                                                                              Navigator.pop(context);
+                                                                                            },
+                                                                                            child: Text("Continue"),
+                                                                                          ),
+                                                                                        ),
+                                                                                      )
+                                                                                    ],
+                                                                                  ),
+                                                                                );
+                                                                              }
                                                                               return Center(
                                                                                 child: Column(
                                                                                   children: [
                                                                                     Text(
-                                                                                      'Rest over',
+                                                                                      time.sec.toString() + "s",
                                                                                       style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold),
                                                                                     ),
                                                                                     Align(
@@ -292,24 +465,18 @@ class _WorkoutPageState extends State<WorkoutPage> {
                                                                                       child: Padding(
                                                                                         padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 10),
                                                                                         child: ElevatedButton(
-
                                                                                           style: ElevatedButton.styleFrom(
-                                                                                            textStyle: TextStyle(
-                                                                                                fontSize: 20,
-                                                                                                fontWeight: FontWeight.w800
-                                                                                            ),
+                                                                                            textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                                                                                             primary: Colors.white,
                                                                                             onPrimary: Colors.black,
-                                                                                            minimumSize: Size(150,50) ,
+                                                                                            minimumSize: Size(150, 50),
                                                                                             shape: RoundedRectangleBorder(
                                                                                               borderRadius: BorderRadius.circular(32.0),
                                                                                             ),
                                                                                           ),
-
                                                                                           onPressed: () {
                                                                                             Navigator.pop(context);
                                                                                           },
-
                                                                                           child: Text("Continue"),
                                                                                         ),
                                                                                       ),
@@ -317,27 +484,22 @@ class _WorkoutPageState extends State<WorkoutPage> {
                                                                                   ],
                                                                                 ),
                                                                               );
-                                                                            }
-                                                                            return Center(
-                                                                              child: Text(
-                                                                                time.sec.toString(),
-                                                                                style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold),
-                                                                              ),
-                                                                            );
-                                                                          },
-                                                                        ),
-                                                                      ]),
-                                                                ),
-                                                              ],
+                                                                            },
+                                                                          ),
+                                                                        ]),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      );
-                                                    }
-                                                  });
-                                                  // _pageController.nextPage(duration: _kDuration, curve: _kCurve);
-                                                },
-                                              ),
+                                                    ).then((value) => {
+                                                      _countdownTimerController.disposeTimer()
+                                                    });
+
+                                                  }
+                                                });
+                                                // _pageController.nextPage(duration: _kDuration, curve: _kCurve);
+                                              },
                                             ),
                                           ),
                                         )
