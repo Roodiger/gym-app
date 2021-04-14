@@ -113,20 +113,22 @@ class SignUpPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-                  child: TextField(
-                    controller: reenterPasswordController,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    obscureText: true,
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: "Re-enter Password",
-                      prefixIcon: Icon(
-                        Icons.vpn_key_rounded,
-                        color: Colors.white,
-                        size: 30,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                    child: TextField(
+                      controller: reenterPasswordController,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      obscureText: true,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      decoration: kTextFieldDecoration.copyWith(
+                        hintText: "Re-enter Password",
+                        prefixIcon: Icon(
+                          Icons.vpn_key_rounded,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                       ),
                     ),
                   ),

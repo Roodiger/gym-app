@@ -146,7 +146,6 @@ class ProgramsPage extends StatelessWidget {
                                                   child: new IconButton(
                                                       icon: Icon(Icons.add_circle,color: Colors.white, size: 40,),
                                                       onPressed: () {
-                                                        print(_exerciseList);
                                                         showDialog(
                                                           context: context,
                                                           builder: (context) =>
@@ -193,7 +192,7 @@ class ProgramsPage extends StatelessWidget {
                                                                                   if (snapshot.connectionState == ConnectionState.done) {
 
                                                                                   snapshot.data.docs.forEach((snapshot) {
-                                                                                  _exerciseList.add(ExerciseList(id: snapshot.id, name: snapshot.data()['name']));
+                                                                                    _exerciseList.add(ExerciseList(id: snapshot.id, name: snapshot.data()['name']));
                                                                                   });
 
                                                                                   return Padding(
