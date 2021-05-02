@@ -33,8 +33,8 @@ class ProgramsPage extends StatelessWidget {
 
   final FirebaseFirestore _firestoreInstance = FirebaseFirestore.instance;
   final TextEditingController alertBoxTextController = new TextEditingController();
-  final TextEditingController exerciseNameController =  new TextEditingController();
-  final TextEditingController exerciseDescriptionController =  new TextEditingController();
+  final TextEditingController programNameController =  new TextEditingController();
+  final TextEditingController programDescriptionController =  new TextEditingController();
   final TextEditingController exerciseRepsController =  new TextEditingController();
   final TextEditingController exerciseSetsController =  new TextEditingController();
   final TextEditingController exerciseRPEController =  new TextEditingController();
@@ -581,7 +581,7 @@ class ProgramsPage extends StatelessWidget {
                                                     Padding(
                                                       padding: const EdgeInsets.fromLTRB(22.0, 40.0, 22.0, 50),
                                                       child: TextField(
-                                                        controller: exerciseNameController,
+                                                        controller: programNameController,
                                                         textCapitalization: TextCapitalization.sentences,
                                                         keyboardType: TextInputType.name,
                                                         style: TextStyle(color: Colors.white, fontSize: 20),
@@ -593,7 +593,7 @@ class ProgramsPage extends StatelessWidget {
                                                     Padding(
                                                       padding: const EdgeInsets.fromLTRB(22.0, 50.0, 22.0, 8.0),
                                                       child: TextField(
-                                                        controller: exerciseDescriptionController,
+                                                        controller: programDescriptionController,
                                                         textCapitalization: TextCapitalization.sentences,
                                                         maxLines: null,
                                                         style: TextStyle(color: Colors.white, fontSize: 20),
@@ -626,14 +626,27 @@ class ProgramsPage extends StatelessWidget {
                                                       ),
 
                                                       onPressed: () {
-                                                        _firestoreInstance.collection('exercises').add({
-                                                          'description': exerciseDescriptionController.text.trim(),
-                                                          'name': exerciseNameController.text.trim(),
-                                                          'user_id': FirebaseAuth.instance.currentUser.uid,
-                                                        });
-                                                        exerciseNameController.clear();
-                                                        exerciseDescriptionController.clear();
-                                                        Navigator.pop(context);
+
+                                                        if(programDescriptionController.text.isNotEmpty && programNameController.text.isNotEmpty) {
+                                                          _firestoreInstance
+                                                              .collection(
+                                                              'programs').add({
+                                                            'description': programDescriptionController
+                                                                .text.trim(),
+                                                            'name': programNameController
+                                                                .text.trim(),
+                                                            'user_id': FirebaseAuth
+                                                                .instance
+                                                                .currentUser
+                                                                .uid,
+                                                          });
+                                                          programNameController
+                                                              .clear();
+                                                          programDescriptionController
+                                                              .clear();
+                                                          Navigator.pop(
+                                                              context);
+                                                        }
                                                       },
 
                                                       child: Text("Save"),
@@ -657,8 +670,8 @@ class ProgramsPage extends StatelessWidget {
                                                         ),
                                                       ),
                                                       onPressed: () {
-                                                        exerciseNameController.clear();
-                                                        exerciseDescriptionController.clear();
+                                                        programNameController.clear();
+                                                        programDescriptionController.clear();
                                                         Navigator.pop(context);
                                                       },
                                                       child: Text("Cancel"),

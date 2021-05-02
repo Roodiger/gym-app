@@ -40,6 +40,8 @@ class Exercises {
       this.rest});
 }
 
+List<List<Widget>> icons = [];
+
 class WorkoutPage extends StatefulWidget {
   final String _programID;
   final String _programName;
@@ -62,7 +64,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   static const _kDuration = const Duration(milliseconds: 300);
   static const _kCurve = Curves.ease;
-  int setNumber = 1;
+  List setNumbers = [];
+  List<List> setInfo = [];
   int timerCount;
 
   @override
@@ -129,6 +132,17 @@ class _WorkoutPageState extends State<WorkoutPage> {
                                       rest: document['rest_time']));
 
                                   List<Widget> setList = [];
+
+                                  for(var $j = 0; $j <= snapshot.data.docs.length - 1; $j++){
+                                    List<Widget> iconList = [];
+                                    List setInfoList = [];
+                                    if(icons.length >= snapshot.data.docs.length){
+                                      break;
+                                    }
+                                    icons.add(iconList);
+                                    setInfo.add(setInfoList);
+                                    setNumbers.add(1);
+                                  }
 
                                   setList.add(
                                     Center(
@@ -229,98 +243,156 @@ class _WorkoutPageState extends State<WorkoutPage> {
                                     ),
                                   );
 
-                                  setList.add(
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              'Set',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold
+                                  List<TableRow> tableList = [];
+
+                                  tableList.add(
+                                      TableRow(
+
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 8.0),
+                                            child: Center(
+                                              child: Text(
+                                                'Set',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold
+                                                ),
                                               ),
                                             ),
-                                            Text(
-                                              'Previous',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 8.0),
+                                            child: Center(
+                                              child: Text(
+                                                'Previous',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold
+                                                ),
                                               ),
                                             ),
-                                            Text(
-                                              'Weight',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(bottom: 8.0),
+                                            child: Center(
+                                              child: Text(
+                                                'Weight',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold
+                                                ),
                                               ),
                                             ),
-                                            Text(
-                                              'Reps',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 8.0),
+                                            child: Center(
+                                              child: Text(
+                                                'Reps',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold
+                                                ),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          new Spacer(),
+                                        ],
                                       )
                                   );
 
                                   for(var i = 0; i <= (int.parse(document['sets']) - 1); i++){
-                                    print(i+1);
-                                    setList.add(
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+                                    icons[int.parse(document['order']) - 1].add(
+                                      Icon(
+                                        Icons.cancel,
+                                        color: Colors.white10,
+                                      ),
+                                    );
+
+                                    tableList.add(
+                                      TableRow(
+                                        decoration: tableList.length % 2 != 0 ? BoxDecoration(
+                                      color: Color(0x1F000000),
+                                      ) : BoxDecoration(
+                                          color: Color(0x00000000),
+                                        ),
                                         children: [
-                                          Text(
-                                          (i + 1).toString(),
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold
-                                            ),
-                                          ),
-                                          Text(
-                                            'TO DO',
-                                            style: TextStyle(
+                                          Center(
+                                            child: Text(
+                                            (i + 1).toString(),
+                                              style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold
-                                            ),
-                                          ),
-                                          IntrinsicWidth(
-                                            child: TextField(
-                                              style: TextStyle(color: Colors.white, fontSize: 20),
-                                              controller: new TextEditingController(),
-                                              keyboardType: TextInputType.number,
-                                              decoration: kTextFieldDecoration.copyWith(
-                                                hintText: "0",
                                               ),
                                             ),
                                           ),
-                                          IntrinsicWidth(
-                                            child: TextField(
-                                              style: TextStyle(color: Colors.white, fontSize: 20),
-                                              controller: new TextEditingController(),
-                                              keyboardType: TextInputType.number,
-                                              decoration: kTextFieldDecoration.copyWith(
-                                                hintText: "0",
+                                          Center(
+                                            child: Text(
+                                              'TO DO',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold
                                               ),
                                             ),
+                                          ),
+                                          Center(
+                                            child: IntrinsicWidth(
+                                              child: TextField(
+                                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                                controller: new TextEditingController(),
+                                                onChanged: (text) {
+                                                    setInfo[int.parse(document['order']) - 1][i] = text;
+                                                  },
+                                                keyboardType: TextInputType.number,
+                                                decoration: kTextFieldDecoration.copyWith(
+                                                  hintText: "0",
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: IntrinsicWidth(
+                                              child: TextField(
+                                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                                controller: new TextEditingController(),
+                                                keyboardType: TextInputType.number,
+                                                decoration: kTextFieldDecoration.copyWith(
+                                                  hintText: "0",
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: icons[int.parse(document['order']) - 1][i],
                                           ),
                                         ],
                                       )
                                     );
                                   }
-                              //    setList.add( new Spacer());
-
-
+                                  setList.add(
+                                      Center(
+                                        child: Table(
+                                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                          columnWidths:
+                                          {
+                                            0: FlexColumnWidth(2),
+                                            1: FlexColumnWidth(2),
+                                            2: FlexColumnWidth(2),
+                                            3: FlexColumnWidth(1),
+                                            4: FlexColumnWidth(1),
+                                          },
+                                            children: tableList
+                                        ),
+                                    ),
+                                  );
 
                                   return Center(
                                     child: Column(
@@ -334,7 +406,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
                                           alignment: Alignment.bottomCenter,
                                           child: Padding(
                                             padding:
-                                            const EdgeInsets.fromLTRB(0, 100.0, 0, 40),
+                                            const EdgeInsets.fromLTRB(0, 40.0, 0, 40),
                                             child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 textStyle: TextStyle(
@@ -350,28 +422,26 @@ class _WorkoutPageState extends State<WorkoutPage> {
                                                       32.0),
                                                 ),
                                               ),
-                                              child: Text(setNumber >=
+                                              child: Text(setNumbers[int.parse(document['order']) - 1] >=
                                                   int.parse(
                                                       document['sets'])
                                                   ? 'Next Exercise'
                                                   : 'Next Set'),
                                               onPressed: () {
                                                 setState(() {
-                                                  setNumber = setNumber + 1;
+                                                  icons[int.parse(document['order']) - 1][setNumbers[int.parse(document['order']) - 1] - 1] = Icon(
+                                                    Icons.check_circle,
+                                                    color: Colors.green,
+                                                  );
+                                                  print(setInfo);
+                                                 setNumbers[int.parse(document['order']) - 1] = setNumbers[int.parse(document['order']) - 1] + 1;
                                                   _countdownTimerController =
                                                       CountdownTimerController(endTime: DateTime.now().millisecondsSinceEpoch + 1000 * int.parse(document['rest_time']), onEnd: onEnd);
-                                                  if (setNumber >
-                                                      int.parse(
-                                                          document['sets'])) {
-                                                    setNumber = 1;
-                                                    _pageController.nextPage(
-                                                        duration: _kDuration,
-                                                        curve: _kCurve);
-                                                  } else {
                                                     showDialog(
                                                       context: context,
                                                       builder: (context) =>
                                                           Dialog(
+
                                                             backgroundColor:
                                                             Colors
                                                                 .transparent,
@@ -394,109 +464,117 @@ class _WorkoutPageState extends State<WorkoutPage> {
                                                                       15),
                                                                   color: const Color(
                                                                       0xff332F43)),
-                                                              child: Column(
-                                                                children: [
-                                                                  Container(
-                                                                    child: ListView(
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding:
-                                                                            const EdgeInsets.all(50.0),
-                                                                            child:
-                                                                            Icon(
-                                                                              Icons.timer,
-                                                                              size:
-                                                                              100,
-                                                                              color:
-                                                                              Colors.white,
-                                                                            ),
-                                                                          ),
-                                                                          CountdownTimer(
-                                                                            controller: _countdownTimerController,
-                                                                            endTime:
-                                                                            DateTime.now().millisecondsSinceEpoch + 1000 * int.parse(document['rest_time']),
-                                                                            onEnd:
-                                                                            onEnd,
-                                                                            widgetBuilder:
-                                                                                (_, time) {
-                                                                              if (time ==
-                                                                                  null) {
-                                                                                return Center(
-                                                                                  child: Column(
-                                                                                    children: [
-                                                                                      Text(
-                                                                                        'Rest over',
-                                                                                        style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold),
-                                                                                      ),
-                                                                                      Align(
-                                                                                        alignment: Alignment.bottomCenter,
-                                                                                        child: Padding(
-                                                                                          padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 10),
-                                                                                          child: ElevatedButton(
-                                                                                            style: ElevatedButton.styleFrom(
-                                                                                              textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-                                                                                              primary: Colors.white,
-                                                                                              onPrimary: Colors.black,
-                                                                                              minimumSize: Size(150, 50),
-                                                                                              shape: RoundedRectangleBorder(
-                                                                                                borderRadius: BorderRadius.circular(32.0),
-                                                                                              ),
-                                                                                            ),
-                                                                                            onPressed: () {
-                                                                                              Navigator.pop(context);
-                                                                                            },
-                                                                                            child: Text("Continue"),
-                                                                                          ),
-                                                                                        ),
-                                                                                      )
-                                                                                    ],
-                                                                                  ),
-                                                                                );
-                                                                              }
-                                                                              return Center(
-                                                                                child: Column(
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      time.sec.toString() + "s",
-                                                                                      style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold),
-                                                                                    ),
-                                                                                    Align(
-                                                                                      alignment: Alignment.bottomCenter,
-                                                                                      child: Padding(
-                                                                                        padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 10),
-                                                                                        child: ElevatedButton(
-                                                                                          style: ElevatedButton.styleFrom(
-                                                                                            textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-                                                                                            primary: Colors.white,
-                                                                                            onPrimary: Colors.black,
-                                                                                            minimumSize: Size(150, 50),
-                                                                                            shape: RoundedRectangleBorder(
-                                                                                              borderRadius: BorderRadius.circular(32.0),
-                                                                                            ),
-                                                                                          ),
-                                                                                          onPressed: () {
-                                                                                            Navigator.pop(context);
-                                                                                          },
-                                                                                          child: Text("Continue"),
-                                                                                        ),
-                                                                                      ),
-                                                                                    )
-                                                                                  ],
+                                                              child: ListView(
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding:
+                                                                      const EdgeInsets.all(50.0),
+                                                                      child:
+                                                                      Icon(
+                                                                        Icons.timer,
+                                                                        size:
+                                                                        100,
+                                                                        color:
+                                                                        Colors.white,
+                                                                      ),
+                                                                    ),
+                                                                    CountdownTimer(
+                                                                      controller: _countdownTimerController,
+                                                                      endTime:
+                                                                      DateTime.now().millisecondsSinceEpoch + 1000 * int.parse(document['rest_time']),
+                                                                      onEnd:
+                                                                      onEnd,
+                                                                      widgetBuilder:
+                                                                          (_, time) {
+                                                                        if (time ==
+                                                                            null) {
+                                                                          return Center(
+                                                                            child: Column(
+                                                                              children: [
+                                                                                Text(
+                                                                                  'Rest over',
+                                                                                  style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold),
                                                                                 ),
-                                                                              );
-                                                                            },
+                                                                                Align(
+                                                                                  alignment: Alignment.bottomCenter,
+                                                                                  child: Padding(
+                                                                                    padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 10),
+                                                                                    child: ElevatedButton(
+                                                                                      style: ElevatedButton.styleFrom(
+                                                                                        textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                                                                                        primary: Colors.white,
+                                                                                        onPrimary: Colors.black,
+                                                                                        minimumSize: Size(150, 50),
+                                                                                        shape: RoundedRectangleBorder(
+                                                                                          borderRadius: BorderRadius.circular(32.0),
+                                                                                        ),
+                                                                                      ),
+                                                                                      onPressed: () {
+                                                                                        if (setNumbers[int.parse(document['order']) - 1] >
+                                                                                        int.parse(
+                                                                                        document['sets'])) {
+
+                                                                                          _pageController.nextPage(
+                                                                                          duration: _kDuration,
+                                                                                          curve: _kCurve);
+                                                                                        }
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      child: Text("Continue"),
+                                                                                    ),
+                                                                                  ),
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        }
+                                                                        return Center(
+                                                                          child: Column(
+                                                                            children: [
+                                                                              Text(
+                                                                                time.sec.toString() + "s",
+                                                                                style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold),
+                                                                              ),
+                                                                              Align(
+                                                                                alignment: Alignment.bottomCenter,
+                                                                                child: Padding(
+                                                                                  padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 10),
+                                                                                  child: ElevatedButton(
+                                                                                    style: ElevatedButton.styleFrom(
+                                                                                      textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                                                                                      primary: Colors.white,
+                                                                                      onPrimary: Colors.black,
+                                                                                      minimumSize: Size(150, 50),
+                                                                                      shape: RoundedRectangleBorder(
+                                                                                        borderRadius: BorderRadius.circular(32.0),
+                                                                                      ),
+                                                                                    ),
+                                                                                    onPressed: () {
+                                                                                      if (setNumbers[int.parse(document['order']) - 1] >
+                                                                                      int.parse(
+                                                                                      document['sets'])) {
+                                                                                      _pageController.nextPage(
+                                                                                      duration: _kDuration,
+                                                                                      curve: _kCurve);
+                                                                                    }
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    child: Text("Continue"),
+                                                                                  ),
+                                                                                ),
+                                                                              )
+                                                                            ],
                                                                           ),
-                                                                        ]),
-                                                                  ),
-                                                                ],
-                                                              ),
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                  ]),
                                                             ),
                                                           ),
                                                     ).then((value) => {
                                                       _countdownTimerController.disposeTimer()
                                                     });
 
-                                                  }
                                                 });
                                                 // _pageController.nextPage(duration: _kDuration, curve: _kCurve);
                                               },
